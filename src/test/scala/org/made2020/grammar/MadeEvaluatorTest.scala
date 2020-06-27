@@ -1,6 +1,7 @@
 package org.made2020.grammar
 
 import org.made2020.grammar.BinaryOperator.{Div, Mult, Sub, Sum}
+import org.scalatest.TryValues._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -25,14 +26,25 @@ class MadeEvaluatorTest extends AnyFlatSpec with Matchers {
   }
 
   it should "work with variables from program state" in {
-    testEval(BinaryOperation(Ident("a"), Mult, Ident("a")), ProgramState(Map("a" -> 3))) shouldBe 9
-    testEval(BinaryOperation(Ident("k"), Sub, Ident("t")), ProgramState(Map("k" -> -2, "t" -> 15))) shouldBe -17
+    testEval(BinaryOperation(Id("a"), Mult, Id("a")), ProgramState(Map("a" -> 3))) shouldBe 9
+    testEval(BinaryOperation(Id("k"), Sub, Id("t")), ProgramState(Map("k" -> -2, "t" -> 15))) shouldBe -17
   }
 
   it should "provide useful exception messages" in {
-    the[EvaluateException] thrownBy
-      MadeEvaluator.evaluate(ProgramState(Map("b" -> 3)))(BinaryOperation(Ident("a"), Mult, Ident("a"))) should have message
-      "Unable to find value for 'a' variable!"
+    MadeEvaluator.evaluate(ProgramState(Map("b" -> 3)))(BinaryOperation(Id("a"), Mult, Id("a")))
+      .failure.exception.getMessage should include("Unable to find value for 'a' variable!")
+
+    MadeEvaluator.evaluate(InitProgramState)(BinaryOperation(Number(4), Div, BinaryOperation(Number(3), Sub, Number(3))))
+      .failure.exception.getMessage should include("Division by 0 detected!")
   }
 
+  it should "update program state on transform" in {
+    MadeEvaluator.transform(Success(InitProgramState), Statement(Id("testVar"), BinaryOperation(Number(1), Sub, Number(2))))
+      .success.value.variables should contain theSameElementsAs (Map("testVar" -> -1))
+  }
+
+  it should "overwrite old values" in {
+    MadeEvaluator.transform(Success(ProgramState(Map("testVar" -> 5))), Statement(Id("testVar"), BinaryOperation(Number(1), Sub, Number(2))))
+      .success.value.variables should contain theSameElementsAs (Map("testVar" -> -1))
+  }
 }

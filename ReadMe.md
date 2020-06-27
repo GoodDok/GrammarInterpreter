@@ -15,7 +15,10 @@ Integer values are limited by +-10^9 so can fit into 32bit variables.
 3. expr -> sum
 4. sum -> sum ("+" | "-") product | product
 5. product = product (* | /) term 
-6. term = "(" expr ")" | wholeNumber
+6. term = "(" expr ")" | wholeNumberSigned
+7. wholeNumber = "-" wholeNumberUnsigned | wholeNumberUnsigned
+7. wholeNumberUnsigned = digit | digit wholeNumberUnsigned
+8. digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 ```
 
 ### Parser generator in use
@@ -31,5 +34,14 @@ with the help of several operators:
 
 Also the framework provides `PackratParser` entity to overcome the left recursion problem. 
 
-The code related to the grammar can be found in [the custom Parser](src\main\scala\org\made2020\grammar\GrammarParsers.scala)
+The code related to the grammar can be found in [the custom parser](src\main\scala\org\made2020\grammar\GrammarParsers.scala)
 
+### How to run
+
+The GrammarInterpreter can be run against a single file of instructions and outputs the full set of variables 
+and their values at the end of parsing and execution. 
+
+```bash 
+sbt clean assembly
+java -cp target\scala-2.13\GrammarInterpreter-assembly-0.1.jar org.made2020.grammar.GrammarApp <full_file_path>
+```

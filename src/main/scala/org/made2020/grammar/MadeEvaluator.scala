@@ -20,7 +20,7 @@ object MadeEvaluator {
 
     val result = expression match {
       case Number(value) => Success(value)
-      case Ident(name) => programState.variables.get(name) match {
+      case Id(name) => programState.variables.get(name) match {
         case Some(value) => Success(value)
         case None => Failure(EvaluateException(s"Unable to find value for '$name' variable!"))
       }

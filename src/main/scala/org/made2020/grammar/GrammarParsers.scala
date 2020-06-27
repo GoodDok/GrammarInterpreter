@@ -20,7 +20,7 @@ object GrammarParsers extends JavaTokenParsers with PackratParsers {
 
   lazy val product: PackratParser[Expression] = product ~ ("*" | "/") ~ term ^^ binaryOp | term
 
-  lazy val term: Parser[Expression] = "(" ~> expr <~ ")" | ident ^^ Ident |
+  lazy val term: Parser[Expression] = "(" ~> expr <~ ")" | ident ^^ Id |
     wholeNumber ^? {
       case n if n.length < 10 => Number(n.toInt)
       case n if n.charAt(0) == '-' && n.length == 10 => Number(n.toInt)
@@ -31,7 +31,7 @@ object GrammarParsers extends JavaTokenParsers with PackratParsers {
   }
 
   def statementOp(p: String ~ String ~ Expression): Statement = p match {
-    case name ~ "=" ~ e => Statement(Ident(name), e)
+    case name ~ "=" ~ e => Statement(Id(name), e)
   }
 
   def apply(code: String): Try[List[Statement]] =
