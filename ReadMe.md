@@ -34,7 +34,7 @@ with the help of several operators:
 
 Also the framework provides `PackratParser` entity to overcome the left recursion problem. 
 
-The code related to the grammar can be found in [the custom parser](src\main\scala\org\made2020\grammar\GrammarParsers.scala)
+The code related to the grammar can be found in [the custom parser](src/main/scala/org/made2020/grammar/GrammarParsers.scala)
 
 ### How to run
 
