@@ -2,8 +2,8 @@
 
 Parses and executes simple assignment statements, holding the program variable state.  
 
-Current grammar supports work with integer values, primitive binary operations, using variables, reassignment.
-Variable names restrictions are in accordance with the Java ones.
+Current grammar supports work with integer values, primitive binary operations, using variables, reassignment.  
+Variable names restrictions are in accordance with the Java ones.  
 Integer values are limited by +-10^9 so can fit into 32bit variables.
 
 
@@ -14,11 +14,11 @@ Integer values are limited by +-10^9 so can fit into 32bit variables.
 2. statement -> ident "=" expr 
 3. expr -> sum
 4. sum -> sum ("+" | "-") product | product
-5. product = product (* | /) term 
+5. product = product ("*" | "/") term 
 6. term = "(" expr ")" | wholeNumberSigned
 7. wholeNumber = "-" wholeNumberUnsigned | wholeNumberUnsigned
 7. wholeNumberUnsigned = digit | digit wholeNumberUnsigned
-8. digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+8. digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 ```
 
 ### Parser generator in use
